@@ -22,7 +22,6 @@ public:
 		bool initialValue;
 	};
 
-
 	explicit Output_GPIO(Array<const Config> configs);
 	~Output_GPIO() override;
 

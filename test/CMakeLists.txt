@@ -11,11 +11,43 @@ macro(generate_hex TARGET)
 endmacro()
 
 if(SERIES)
-	# generate UsbDeviceTest for every board
+	# generate InOutTest and TriggerTest for every board
 	foreach(BOARD ${coco-devboards_COMPONENT_NAMES})
 		string(REGEX REPLACE ".*\\:" "InOutTest-" NAME ${BOARD})
 		add_executable(${NAME}
 			InOutTest.cpp
+		)
+		target_include_directories(${NAME}
+			PRIVATE
+				../
+		)
+
+		# find link.ld of board
+		get_target_property(INCLUDES ${BOARD} INTERFACE_INCLUDE_DIRECTORIES)
+		target_link_directories(${NAME}
+			PRIVATE	
+				${INCLUDES}
+		)
+
+		target_link_libraries(${NAME}
+			coco::coco
+			${BOARD}
+			coco-loop::coco-loop
+			${PROJECT_NAME}
+		)
+
+		# windows specific libraries
+		if(WIN32)
+			target_link_libraries(${NAME} wsock32 ws2_32 winmm)
+		endif()
+
+		# generate hex file for flashing the target
+		generate_hex(${NAME})
+
+
+		string(REGEX REPLACE ".*\\:" "TriggerTest-" NAME ${BOARD})
+		add_executable(${NAME}
+			TriggerTest.cpp
 		)
 		target_include_directories(${NAME}
 			PRIVATE

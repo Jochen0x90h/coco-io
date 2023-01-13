@@ -7,13 +7,13 @@
 namespace coco {
 
 /**
- * Implementation of an InOut that simply writes info about the in/out operations to std::cout
+ * Implementation of an InOut interface that simply writes info about the in/out operations to std::cout
  */
-class InOutOut : public InOut {
+class InOut_cout : public InOut {
 public:
 
-	explicit InOutOut(std::string name) : name(std::move(name)) {}
-	~InOutOut() override;
+	explicit InOut_cout(std::string name) : name(std::move(name)) {}
+	~InOut_cout() override;
 
 	[[nodiscard]] Awaitable<InParameters> get(uint32_t &pins) override;
 	void getBlocking(uint32_t &pins) override;

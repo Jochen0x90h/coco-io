@@ -17,11 +17,11 @@ public:
 	struct Config {
 		int pin; // port and pin index
 		gpio::Pull pull;
+		gpio::Speed speed;
 		gpio::Drive drive;
 		bool invert;
 		bool initialValue;
 	};
-
 
 	explicit Output_GPIO(Array<const Config> configs);
 	~Output_GPIO() override;

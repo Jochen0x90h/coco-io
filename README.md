@@ -3,7 +3,7 @@
 Input/Output (GPIO) module for CoCo
 
 ## Import
-Add coco-io/<version> to your conanfile where version corresponds to the git tags
+Add coco-io/\<version> to your conanfile where version corresponds to the git tags
 
 ## Features
 * Inputs

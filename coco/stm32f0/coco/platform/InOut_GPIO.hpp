@@ -23,7 +23,6 @@ public:
 		bool initialValue;
 	};
 
-
 	explicit InOut_GPIO(Array<const Config> configs);
 	~InOut_GPIO() override;
 

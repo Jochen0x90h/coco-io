@@ -5,7 +5,7 @@
 
 using namespace coco;
 
-Coroutine timer1(InOut &io) {
+Coroutine test(InOut &io) {
 	int count = 0;
 	while (true) {
 		io.setBlocking(count);
@@ -22,10 +22,9 @@ Coroutine timer1(InOut &io) {
 }
 
 int main() {
-	loop::init();
 	board::InOutTest drivers;
 
-	timer1(drivers.io);
+	test(drivers.io);
 	
 	loop::run();
 }
