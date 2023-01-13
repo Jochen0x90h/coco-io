@@ -11,7 +11,7 @@ namespace coco {
 /**
  * Implementation of an Input interface using GPIO
  */
-class Input_GPIO : public InOut {
+class Input_GPIO : public Input {
 public:
 
 	struct Config {
@@ -19,7 +19,6 @@ public:
 		gpio::Pull pull;
 		bool invert;
 	};
-
 
 	explicit Input_GPIO(Array<const Config> configs);
 	~Input_GPIO() override;
