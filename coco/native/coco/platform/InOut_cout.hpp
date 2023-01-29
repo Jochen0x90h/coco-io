@@ -7,7 +7,7 @@
 namespace coco {
 
 /**
- * Implementation of an InOut interface that simply writes info about the in/out operations to std::cout
+ * Implementation of the InOut interface that simply writes info about the in/out operations to std::cout
  */
 class InOut_cout : public InOut {
 public:

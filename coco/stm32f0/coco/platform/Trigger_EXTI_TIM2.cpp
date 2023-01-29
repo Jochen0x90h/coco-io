@@ -4,7 +4,7 @@
 
 namespace coco {
 
-Trigger_EXTI_TIM2::Trigger_EXTI_TIM2(Array<const Config> configs) : configs(configs) {
+Trigger_EXTI_TIM2::Trigger_EXTI_TIM2(Loop_TIM2 &loop, Array<const Config> configs) : configs(configs) {
     assert(configs.size() <= 8);
     for (int index = 0; index < configs.size(); ++index) {
 		auto &config = configs[index];
@@ -35,7 +35,7 @@ Trigger_EXTI_TIM2::Trigger_EXTI_TIM2(Array<const Config> configs) : configs(conf
 	TIM2->DIER = TIM2->DIER | TIM_DIER_CC2IE; // interrupt enable
 
 	// add to list of handlers
-	coco::handlers.add(*this);
+	loop.handlers.add(*this);
 }
 
 Trigger_EXTI_TIM2::~Trigger_EXTI_TIM2() {

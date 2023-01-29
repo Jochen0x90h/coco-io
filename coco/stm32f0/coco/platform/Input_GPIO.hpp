@@ -9,7 +9,7 @@
 namespace coco {
 
 /**
- * Implementation of an Input interface using GPIO
+ * Implementation of the Input interface using GPIO
  */
 class Input_GPIO : public Input {
 public:

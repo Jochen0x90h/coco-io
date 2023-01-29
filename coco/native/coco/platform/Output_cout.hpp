@@ -7,7 +7,7 @@
 namespace coco {
 
 /**
- * Implementation of an Output interface that simply writes info about the out operations to std::cout
+ * Implementation of the Output interface that simply writes info about the out operations to std::cout
  */
 class Output_cout : public Output {
 public:

@@ -4,7 +4,7 @@
 
 namespace coco {
 
-Trigger_GPIOTE_RTC0::Trigger_GPIOTE_RTC0(Array<const Config> configs) : configs(configs) {
+Trigger_GPIOTE_RTC0::Trigger_GPIOTE_RTC0(Loop_RTC0 &loop, Array<const Config> configs) : configs(configs) {
     assert(configs.size() <= 8);
     for (int index = 0; index < configs.size(); ++index) {
 		auto &config = configs[index];
@@ -33,7 +33,7 @@ Trigger_GPIOTE_RTC0::Trigger_GPIOTE_RTC0(Array<const Config> configs) : configs(
 	NRF_RTC0->INTENSET = N(RTC_INTENSET_COMPARE1, Set);
 
 	// add to list of handlers
-	coco::handlers.add(*this);
+	loop.handlers.add(*this);
 }
 
 Trigger_GPIOTE_RTC0::~Trigger_GPIOTE_RTC0() {

@@ -1,6 +1,6 @@
-#include <coco/loop.hpp>
+#include <coco/Loop.hpp>
 #include <coco/debug.hpp>
-#include <coco/board/TriggerTest.hpp>
+#include <TriggerTest.hpp>
 
 
 using namespace coco;
@@ -22,9 +22,9 @@ Coroutine test(Trigger &trigger) {
 
 int main() {
 	debug::init();
-	board::TriggerTest drivers;
+	Drivers drivers;
 
 	test(drivers.trigger);
 	
-	loop::run();
+	drivers.loop.run();
 }

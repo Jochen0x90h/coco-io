@@ -1,4 +1,4 @@
-# CoCo SPI
+# CoCo IO
 
 Input/Output (GPIO) module for CoCo
 

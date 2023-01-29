@@ -7,7 +7,7 @@
 namespace coco {
 
 /**
- * Dummy Implementation of an input trigger with debounce filter
+ * Implementation of the Trigger interface that simply writes info about the out operations to std::cout
  */
 class Trigger_cout : public Trigger {
 public:

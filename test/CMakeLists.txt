@@ -10,20 +10,26 @@ macro(generate_hex TARGET)
 	endif()
 endmacro()
 
-if(SERIES)
-	# generate InOutTest and TriggerTest for every board
-	foreach(BOARD ${coco-devboards_COMPONENT_NAMES})
-		string(REGEX REPLACE ".*\\:" "InOutTest-" NAME ${BOARD})
+# iterate over boards and generate tests
+foreach(COMPONENT ${coco-devboards_COMPONENT_NAMES})
+	string(REGEX REPLACE ".*\\:" "" BOARD ${COMPONENT})
+	message("*** Boad: ${BOARD}")
+	
+	# check if board specific header exists
+	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${BOARD}/InOutTest.hpp)
+		set(NAME "InOutTest-${BOARD}")
+
 		add_executable(${NAME}
 			InOutTest.cpp
 		)
 		target_include_directories(${NAME}
 			PRIVATE
 				../
+				${BOARD}
 		)
 
 		# find link.ld of board
-		get_target_property(INCLUDES ${BOARD} INTERFACE_INCLUDE_DIRECTORIES)
+		get_target_property(INCLUDES ${COMPONENT} INTERFACE_INCLUDE_DIRECTORIES)
 		target_link_directories(${NAME}
 			PRIVATE	
 				${INCLUDES}
@@ -31,7 +37,7 @@ if(SERIES)
 
 		target_link_libraries(${NAME}
 			coco::coco
-			${BOARD}
+			${COMPONENT}
 			coco-loop::coco-loop
 			${PROJECT_NAME}
 		)
@@ -43,19 +49,23 @@ if(SERIES)
 
 		# generate hex file for flashing the target
 		generate_hex(${NAME})
+	endif()
 
+	# check if board specific header exists
+	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${BOARD}/TriggerTest.hpp)
+		set(NAME "TriggerTest-${BOARD}")
 
-		string(REGEX REPLACE ".*\\:" "TriggerTest-" NAME ${BOARD})
 		add_executable(${NAME}
 			TriggerTest.cpp
 		)
 		target_include_directories(${NAME}
 			PRIVATE
 				../
+				${BOARD}
 		)
 
 		# find link.ld of board
-		get_target_property(INCLUDES ${BOARD} INTERFACE_INCLUDE_DIRECTORIES)
+		get_target_property(INCLUDES ${COMPONENT} INTERFACE_INCLUDE_DIRECTORIES)
 		target_link_directories(${NAME}
 			PRIVATE	
 				${INCLUDES}
@@ -63,7 +73,7 @@ if(SERIES)
 
 		target_link_libraries(${NAME}
 			coco::coco
-			${BOARD}
+			${COMPONENT}
 			coco-loop::coco-loop
 			${PROJECT_NAME}
 		)
@@ -75,5 +85,5 @@ if(SERIES)
 
 		# generate hex file for flashing the target
 		generate_hex(${NAME})
-	endforeach()
-endif()
+	endif()
+endforeach()

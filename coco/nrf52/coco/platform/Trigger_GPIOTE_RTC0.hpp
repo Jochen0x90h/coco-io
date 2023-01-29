@@ -2,14 +2,14 @@
 
 #include <coco/Array.hpp>
 #include <coco/Trigger.hpp>
-#include <coco/platform/Handler.hpp>
+#include <coco/platform/Loop_RTC0.hpp>
 #include <coco/platform/gpio.hpp>
 
 
 namespace coco {
 
 /**
- * Implementation of an input trigger with debounce filter using GPIOTE and RTC0
+ * Implementation of the Trigger interface with debounce filter using GPIOTE and RTC0
  * 
  * Resources:
  *	GPIO
@@ -27,14 +27,13 @@ public:
 		bool invert;
 	};
 
-	explicit Trigger_GPIOTE_RTC0(Array<const Config> configs);
+	explicit Trigger_GPIOTE_RTC0(Loop_RTC0 &loop, Array<const Config> configs);
 	~Trigger_GPIOTE_RTC0() override;
 
 	[[nodiscard]] Awaitable<Parameters> trigger(uint32_t &risingFlags, uint32_t &fallingFlags) override;
 
-	void handle() override;
-
 protected:
+	void handle() override;
 
 	Array<const Config> configs;
 
