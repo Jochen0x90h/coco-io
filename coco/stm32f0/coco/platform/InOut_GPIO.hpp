@@ -8,7 +8,7 @@
 namespace coco {
 
 /**
- * Implementation of an InOut interface using GPIO
+ * Implementation of the InOut interface using GPIO
  */
 class InOut_GPIO : public InOut {
 public:

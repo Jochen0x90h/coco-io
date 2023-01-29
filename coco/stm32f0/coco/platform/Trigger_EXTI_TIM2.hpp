@@ -2,14 +2,14 @@
 
 #include <coco/Array.hpp>
 #include <coco/Trigger.hpp>
-#include <coco/platform/Handler.hpp>
+#include <coco/platform/Loop_TIM2.hpp>
 #include <coco/platform/gpio.hpp>
 
 
 namespace coco {
 
 /**
- * Implementation of an input trigger with debounce filter using GPIO and TIM2
+ * Implementation of the Trigger interface with debounce filter using GPIO and TIM2
  * 
  * Resources:
  *	GPIO
@@ -27,7 +27,7 @@ public:
 	};
 
 
-	explicit Trigger_EXTI_TIM2(Array<const Config> configs);
+	explicit Trigger_EXTI_TIM2(Loop_TIM2 &loop, Array<const Config> configs);
 	~Trigger_EXTI_TIM2() override;
 
 	[[nodiscard]] Awaitable<Parameters> trigger(uint32_t &risingFlags, uint32_t &fallingFlags) override;

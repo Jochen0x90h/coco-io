@@ -9,7 +9,7 @@
 namespace coco {
 
 /**
- * Implementation of an Output interface using GPIO
+ * Implementation of the Output interface using GPIO
  */
 class Output_GPIO : public Output {
 public:

@@ -1,15 +1,15 @@
-#include <coco/loop.hpp>
+#include <coco/Loop.hpp>
 //#include <coco/debug.hpp> // no debug as test outputs are connected to debug LEDs
-#include <coco/board/InOutTest.hpp>
+#include <InOutTest.hpp>
 
 
 using namespace coco;
 
-Coroutine test(InOut &io) {
+Coroutine test(Loop &loop, InOut &io) {
 	int count = 0;
 	while (true) {
 		io.setBlocking(count);
-		co_await loop::sleep(500ms);
+		co_await loop.sleep(500ms);
 
 		// clear counter if button is pressed, otherwise count up
 		uint32_t pins;
@@ -22,9 +22,9 @@ Coroutine test(InOut &io) {
 }
 
 int main() {
-	board::InOutTest drivers;
+	Drivers drivers;
 
-	test(drivers.io);
+	test(drivers.loop, drivers.io);
 	
-	loop::run();
+	drivers.loop.run();
 }
