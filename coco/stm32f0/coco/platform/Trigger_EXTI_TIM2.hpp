@@ -10,14 +10,14 @@ namespace coco {
 
 /**
  * Implementation of the Trigger interface with debounce filter using GPIO and TIM2
- * 
+ *
  * Resources:
  *	GPIO
  *	EXTI
  *	TIM2
  *		CCR2
  */
-class Trigger_EXTI_TIM2 : public Trigger, public Handler {
+class Trigger_EXTI_TIM2 : public Trigger, public Loop_TIM2::Handler {
 public:
 
 	struct Config {
@@ -33,7 +33,7 @@ public:
 	[[nodiscard]] Awaitable<Parameters> trigger(uint32_t &risingFlags, uint32_t &fallingFlags) override;
 
 	void handle() override;
-	
+
 protected:
 
 	Array<const Config> configs;
@@ -42,14 +42,14 @@ protected:
 	int32_t next;
 
 	// states for debounce filter
-	struct State {	
+	struct State {
 		int32_t timeout;
 		bool value;
 	};
 	State states[8];
 
 	// waiting coroutines
-	Waitlist<Parameters> waitlist;
+	TaskList<Parameters> tasks;
 };
 
 } // namespace coco

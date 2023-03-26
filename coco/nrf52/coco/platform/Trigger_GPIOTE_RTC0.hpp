@@ -10,7 +10,7 @@ namespace coco {
 
 /**
  * Implementation of the Trigger interface with debounce filter using GPIOTE and RTC0
- * 
+ *
  * Resources:
  *	GPIO
  *	NRF_GPIOTE
@@ -18,7 +18,7 @@ namespace coco {
  *	NRF_RTC0
  *		CC[1]
  */
-class Trigger_GPIOTE_RTC0 : public Trigger, public Handler {
+class Trigger_GPIOTE_RTC0 : public Trigger, public Loop_RTC0::Handler {
 public:
 
 	struct Config {
@@ -41,14 +41,14 @@ protected:
 	int32_t next;
 
 	// states for debounce filter
-	struct State {	
+	struct State {
 		int32_t timeout;
 		bool value;
 	};
 	State states[8];
 
 	// waiting coroutines
-	Waitlist<Parameters> waitlist;
+	TaskList<Parameters> tasks;
 };
 
 } // namespace coco
