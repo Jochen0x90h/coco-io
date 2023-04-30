@@ -16,7 +16,7 @@ public:
 	~Output_cout() override;
 
 	[[nodiscard]] Awaitable<OutParameters> set(uint32_t pins, uint32_t mask = 0xffffffff) override;
-	void setBlocking(uint32_t pins, uint32_t mask = 0xffffffff) override;
+	void setBlocking(uint32_t pins, uint32_t mask = 0xffffffff);
 
 protected:
 

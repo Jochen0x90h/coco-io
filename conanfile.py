@@ -6,7 +6,6 @@ from conan.tools.cmake import CMake
 class Project(ConanFile):
     name = "coco-io"
     description = "Input/Output module for CoCo"
-    url = "https://github.com/Jochen0x90h/coco-io"
     license = "MIT"
     settings = "os", "compiler", "build_type", "arch"
     options = {
@@ -32,9 +31,9 @@ class Project(ConanFile):
 
     def configure(self):
         # pass platform option to dependencies
-        self.options["coco-toolchain"].platform = self.options.platform
         self.options["coco"].platform = self.options.platform
         self.options["coco-loop"].platform = self.options.platform
+        self.options["coco-toolchain"].platform = self.options.platform
         self.options["coco-devboards"].platform = self.options.platform
 
     keep_imports = True
