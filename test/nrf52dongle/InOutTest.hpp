@@ -7,10 +7,10 @@
 using namespace coco;
 
 InOut_GPIO::Config ioConfig[] {
-	{gpio::P0(23), gpio::Mode::OUTPUT, gpio::Pull::DISABLED, gpio::Drive::S0D1, true, false}, // red LED
-	{gpio::P0(22), gpio::Mode::OUTPUT, gpio::Pull::DISABLED, gpio::Drive::S0D1, true, false}, // green LED
-	{gpio::P0(24), gpio::Mode::OUTPUT, gpio::Pull::DISABLED, gpio::Drive::S0D1, true, false}, // blue LED
-	{gpio::P0(18), gpio::Mode::INPUT, gpio::Pull::UP, gpio::Drive::S0D1, true, false} // user button
+	{gpio::P0(23), gpio::Pull::DISABLED, gpio::Drive::S0D1, true}, // red LED
+	{gpio::P0(22), gpio::Pull::DISABLED, gpio::Drive::S0D1, true}, // green LED
+	{gpio::P0(24), gpio::Pull::DISABLED, gpio::Drive::S0D1, true}, // blue LED
+	{gpio::P0(18), gpio::Pull::UP, gpio::Drive::S0D1, true} // user button
 };
 
 // drivers for InOutTest

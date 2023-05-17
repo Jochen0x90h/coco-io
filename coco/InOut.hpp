@@ -7,7 +7,8 @@
 namespace coco {
 
 /**
-	General purpose inputs and outputs
+	General purpose inputs and outputs with output enable. The output drivers are disabled by default and the output
+	value is undefined
 */
 class InOut : public Input, public Output {
 public:

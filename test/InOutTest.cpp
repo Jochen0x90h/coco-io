@@ -6,6 +6,9 @@
 using namespace coco;
 
 Coroutine test(Loop &loop, InOut &io) {
+	// set LED pins to output
+	co_await io.enableOut(7, 7);
+
 	int count = 0;
 	while (true) {
 		co_await io.set(count);

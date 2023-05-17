@@ -15,12 +15,10 @@ public:
 
 	struct Config {
 		int pin; // port and pin index
-		gpio::Mode mode;
 		gpio::Pull pull;
 		gpio::Speed speed;
 		gpio::Drive drive;
 		bool invert;
-		bool initialValue;
 	};
 
 	explicit InOut_GPIO(Array<const Config> configs);
