@@ -7,8 +7,8 @@
 namespace coco {
 
 /**
- * General purpose inputs
- */
+	General purpose inputs
+*/
 class Input {
 public:
 
@@ -21,17 +21,13 @@ public:
 	virtual ~Input();
 
 	/**
-	 * Read an input directly without debounce filter
-	 * @param pins bits for the pins
-	 * @return use co_await on return value to await completion
-	 */
+		Read the current value of an input
+		@param pins bits for the pins
+		@return use co_await on return value to await completion
+	*/
 	[[nodiscard]] virtual Awaitable<InParameters> get(uint32_t &pins) = 0;
 
-	/**
-	 * Read an input directly without debounce filter
-	 * @param pins bits for the pins
-	 */
-	virtual void getBlocking(uint32_t &pins) = 0;
+	//virtual void getBlocking(uint32_t &pins) = 0;
 };
 
 } // namespace coco

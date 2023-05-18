@@ -20,13 +20,13 @@ Trigger_EXTI_TIM2::Trigger_EXTI_TIM2(Loop_TIM2 &loop, Array<const Config> config
 		EXTICR = EXTICR | (port << (pin & 3));
 		EXTI->FTSR = EXTI->FTSR | 1 << pin; // detect falling edge
 		EXTI->RTSR = EXTI->RTSR | 1 << pin; // detect rising edge
-		EXTI->PR = 1 << pin; // clear pending interrupt			
+		EXTI->PR = 1 << pin; // clear pending interrupt
 		EXTI->IMR = EXTI->IMR | 1 << pin; // enable interrupt
-			
+
 		// initialize state
 		auto &state = states[index];
 		state.timeout = 0x7fffffff;
-		state.value = gpio::getInput(config.pin) != config.invert;		
+		state.value = gpio::getInput(config.pin) != config.invert;
 	}
 
 	// use channel 2 of TIM2 (initialized by SystemInit())
@@ -42,7 +42,7 @@ Trigger_EXTI_TIM2::~Trigger_EXTI_TIM2() {
 }
 
 Awaitable<Trigger::Parameters> Trigger_EXTI_TIM2::trigger(uint32_t &risingFlags, uint32_t &fallingFlags) {
-    return {this->waitlist, &risingFlags, &fallingFlags};
+    return {this->tasks, &risingFlags, &fallingFlags};
 }
 
 void Trigger_EXTI_TIM2::handle() {
@@ -54,17 +54,17 @@ void Trigger_EXTI_TIM2::handle() {
 			auto &config = this->configs[index];
 			int pos = config.pin & 15;
 			if (PR & (1 << pos)) {
-				auto &state = this->states[index];			
+				auto &state = this->states[index];
 
 				// set debounce timeout
 				state.timeout = timeout;
-				
+
 				// check if this is the next timeout
 				if ((timeout - this->next) < 0) {
 					this->next = timeout;
 					TIM2->CCR2 = timeout;
 				}
-			}		
+			}
 		}
 
 		// clear pending interrupt flags at peripheral and NVIC
@@ -81,14 +81,14 @@ void Trigger_EXTI_TIM2::handle() {
 
 			// get current time
 			auto time = this->next;
-			
+
 			// add RTC interval
 			this->next += 0x7fffffff;
-			
+
 			for (int index = 0; index < this->configs.size(); ++index) {
 				auto &config = this->configs[index];
 				auto &state = this->states[index];
-				
+
 				// check if debounce timeout for this input elapsed
 				if (state.timeout == time) {
 					state.timeout += 0x7fffffff;
@@ -99,10 +99,10 @@ void Trigger_EXTI_TIM2::handle() {
 					state.value = value;
 
 					uint32_t risingFlag = int(value && !old) << index;
-					uint32_t fallingFlag = int(!value && old) << index;					
+					uint32_t fallingFlag = int(!value && old) << index;
 
 					// resume coroutines that wait for an event on this input
-					this->waitlist.resumeAll([risingFlag, fallingFlag] (Parameters &p) {
+					this->tasks.resumeAll([risingFlag, fallingFlag] (Parameters &p) {
 						if ((*p.risingFlags & risingFlag) != 0 || (*p.fallingFlags & fallingFlag) != 0) {
 							*p.risingFlags = risingFlag;
 							*p.fallingFlags = fallingFlag;
@@ -116,7 +116,7 @@ void Trigger_EXTI_TIM2::handle() {
 				}
 			}
 			TIM2->CCR2 = this->next;
-		
+
 			// repeat until next timeout is in the future
 		} while (int32_t(TIM2->CNT) - this->next >= 0);
 	}

@@ -5,8 +5,7 @@ namespace coco {
 
 InOut_GPIO::InOut_GPIO(Array<const Config> configs) : configs(configs) {
 	for (const auto &config : configs) {
-		gpio::setOutput(config.pin, config.initialValue != config.invert);
-		gpio::configureInOut(config.pin, config.mode, config.pull, config.drive);
+		gpio::configureInOut(config.pin, gpio::Mode::INPUT, config.pull, config.drive);
 	}
 }
 

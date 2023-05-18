@@ -2,6 +2,7 @@
 
 #include <coco/platform/Loop_TIM2.hpp>
 #include <coco/platform/Trigger_EXTI_TIM2.hpp>
+#include <coco/board/config.hpp>
 
 
 using namespace coco;

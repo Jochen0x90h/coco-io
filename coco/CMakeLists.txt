@@ -12,7 +12,7 @@ target_sources(${PROJECT_NAME}
 		Trigger.cpp
 )
 
-if(${PLATFORM} STREQUAL "native")
+if(${PLATFORM} STREQUAL "native" OR ${PLATFORM} STREQUAL "emu")
 	# native platform (Windows, MacOS, Linux)
 	target_sources(${PROJECT_NAME}
 		PUBLIC FILE_SET platform_headers TYPE HEADERS BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/native FILES

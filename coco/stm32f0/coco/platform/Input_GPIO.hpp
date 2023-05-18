@@ -24,7 +24,7 @@ public:
 	~Input_GPIO() override;
 
 	[[nodiscard]] Awaitable<InParameters> get(uint32_t &pins) override;
-	void getBlocking(uint32_t &pins) override;
+	void getBlocking(uint32_t &pins);
 
 protected:
 
