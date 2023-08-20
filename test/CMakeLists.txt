@@ -14,13 +14,13 @@ endmacro()
 foreach(COMPONENT ${coco-devboards_COMPONENT_NAMES})
 	string(REGEX REPLACE ".*\\:" "" BOARD ${COMPONENT})
 	message("*** Boad: ${BOARD}")
-	
+
 	# check if board specific header exists
-	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${BOARD}/InOutTest.hpp)
-		set(NAME "InOutTest-${BOARD}")
+	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${BOARD}/InOutPinsTest.hpp)
+		set(NAME "InOutPinsTest-${BOARD}")
 
 		add_executable(${NAME}
-			InOutTest.cpp
+			InOutPinsTest.cpp
 		)
 		target_include_directories(${NAME}
 			PRIVATE
@@ -31,7 +31,7 @@ foreach(COMPONENT ${coco-devboards_COMPONENT_NAMES})
 		# find link.ld of board
 		get_target_property(INCLUDES ${COMPONENT} INTERFACE_INCLUDE_DIRECTORIES)
 		target_link_directories(${NAME}
-			PRIVATE	
+			PRIVATE
 				${INCLUDES}
 		)
 
@@ -42,21 +42,16 @@ foreach(COMPONENT ${coco-devboards_COMPONENT_NAMES})
 			${PROJECT_NAME}
 		)
 
-		# windows specific libraries
-		if(WIN32)
-			target_link_libraries(${NAME} wsock32 ws2_32 winmm)
-		endif()
-
 		# generate hex file for flashing the target
 		generate_hex(${NAME})
 	endif()
 
 	# check if board specific header exists
-	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${BOARD}/TriggerTest.hpp)
-		set(NAME "TriggerTest-${BOARD}")
+	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${BOARD}/InputTest.hpp)
+		set(NAME "InputTest-${BOARD}")
 
 		add_executable(${NAME}
-			TriggerTest.cpp
+			InputTest.cpp
 		)
 		target_include_directories(${NAME}
 			PRIVATE
@@ -67,7 +62,7 @@ foreach(COMPONENT ${coco-devboards_COMPONENT_NAMES})
 		# find link.ld of board
 		get_target_property(INCLUDES ${COMPONENT} INTERFACE_INCLUDE_DIRECTORIES)
 		target_link_directories(${NAME}
-			PRIVATE	
+			PRIVATE
 				${INCLUDES}
 		)
 
@@ -78,12 +73,8 @@ foreach(COMPONENT ${coco-devboards_COMPONENT_NAMES})
 			${PROJECT_NAME}
 		)
 
-		# windows specific libraries
-		if(WIN32)
-			target_link_libraries(${NAME} wsock32 ws2_32 winmm)
-		endif()
-
 		# generate hex file for flashing the target
 		generate_hex(${NAME})
 	endif()
+
 endforeach()

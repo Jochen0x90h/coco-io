@@ -1,5 +1,6 @@
 #pragma once
 
+#include <coco/Array.hpp>
 #include <coco/Coroutine.hpp>
 #include <cstdint>
 
@@ -7,27 +8,26 @@
 namespace coco {
 
 /**
-	General purpose inputs
+	Interface for digital inputs such as buttons and rotary knobs.
+	Each element has state represented by an integer that can count state changes, button pressess or rotary knob
+	movements. This way no input action is missed even if the interface is queried every now and then (principle is
+	inspired by Microsoft's GameInput)
 */
 class Input {
 public:
 
-	// Internal helper: Stores the parameters in the awaitable during co_await
-	struct InParameters {
-		uint32_t *pins;
-	};
-
-
-	virtual ~Input();
+	virtual ~Input() {}
 
 	/**
-		Read the current value of an input
-		@param pins bits for the pins
-		@return use co_await on return value to await completion
+		Get the current state of the buttons
+		@param state state of buttons
 	*/
-	[[nodiscard]] virtual Awaitable<InParameters> get(uint32_t &pins) = 0;
+	virtual void getState(const Array<int8_t> &state) = 0;
 
-	//virtual void getBlocking(uint32_t &pins) = 0;
+	/**
+		Wait for a state change
+	*/
+	[[nodiscard]] virtual Awaitable<> stateChange() = 0;
 };
 
 } // namespace coco
