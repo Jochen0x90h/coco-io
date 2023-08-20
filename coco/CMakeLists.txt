@@ -1,56 +1,66 @@
 add_library(${PROJECT_NAME})
 target_sources(${PROJECT_NAME}
 	PUBLIC FILE_SET headers TYPE HEADERS FILES
-		InOut.hpp
 		Input.hpp
-		Output.hpp
-		Trigger.hpp
+		InOutPins.hpp
+		InputPins.hpp
+		OutputPins.hpp
+		OutputPins_nop.hpp
 	PRIVATE
-		InOut.cpp
 		Input.cpp
-		Output.cpp
-		Trigger.cpp
+		InOutPins.cpp
+		InputPins.cpp
+		OutputPins.cpp
+		OutputPins_nop.cpp
 )
 
-if(${PLATFORM} STREQUAL "native" OR ${PLATFORM} STREQUAL "emu")
+if(${PLATFORM} STREQUAL "native")
 	# native platform (Windows, MacOS, Linux)
 	target_sources(${PROJECT_NAME}
 		PUBLIC FILE_SET platform_headers TYPE HEADERS BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/native FILES
-			native/coco/platform/InOut_cout.hpp
-			native/coco/platform/Input_cout.hpp
-			native/coco/platform/Output_cout.hpp
-			native/coco/platform/Trigger_cout.hpp
+			native/coco/platform/InOutPins_cout.hpp
+			native/coco/platform/InputPins_cout.hpp
+			native/coco/platform/OutputPins_cout.hpp
 		PRIVATE
-			native/coco/platform/InOut_cout.cpp
-			native/coco/platform/Input_cout.cpp
-			native/coco/platform/Output_cout.cpp
-			native/coco/platform/Trigger_cout.cpp
+			native/coco/platform/InOutPins_cout.cpp
+			native/coco/platform/InputPins_cout.cpp
+			native/coco/platform/OutputPins_cout.cpp
+	)
+elseif(${PLATFORM} STREQUAL "emu")
+	# emulator platform with graphical user interface (Windows, MacOS, Linux)
+	target_sources(${PROJECT_NAME}
+		PUBLIC FILE_SET platform_headers TYPE HEADERS BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/emu FILES
+			emu/coco/platform/GuiRotaryButton.hpp
+			emu/coco/platform/RotaryButton_emu.hpp
+		PRIVATE
+			emu/coco/platform/GuiRotaryButton.cpp
+			emu/coco/platform/RotaryButton_emu.cpp
 	)
 elseif(${PLATFORM} MATCHES "^nrf52")
 	target_sources(${PROJECT_NAME}
 		PUBLIC FILE_SET platform_headers TYPE HEADERS BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/nrf52 FILES
-			nrf52/coco/platform/InOut_GPIO.hpp
-			nrf52/coco/platform/Input_GPIO.hpp
-			nrf52/coco/platform/Output_GPIO.hpp
-			nrf52/coco/platform/Trigger_GPIOTE_RTC0.hpp
+			nrf52/coco/platform/RotaryButton_QDEC_GPIOTE.hpp
+			nrf52/coco/platform/InOutPins_GPIO.hpp
+			nrf52/coco/platform/InputPins_GPIO.hpp
+			nrf52/coco/platform/OutputPins_GPIO.hpp
 		PRIVATE
-			nrf52/coco/platform/InOut_GPIO.cpp
-			nrf52/coco/platform/Input_GPIO.cpp
-			nrf52/coco/platform/Output_GPIO.cpp
-			nrf52/coco/platform/Trigger_GPIOTE_RTC0.cpp
+			nrf52/coco/platform/RotaryButton_QDEC_GPIOTE.cpp
+			nrf52/coco/platform/InOutPins_GPIO.cpp
+			nrf52/coco/platform/InputPins_GPIO.cpp
+			nrf52/coco/platform/OutputPins_GPIO.cpp
 	)
-elseif(${PLATFORM} MATCHES "^stm32f0")
+elseif(${PLATFORM} MATCHES "^stm32f0" OR ${PLATFORM} MATCHES "^stm32g4")
 	target_sources(${PROJECT_NAME}
 		PUBLIC FILE_SET platform_headers TYPE HEADERS BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/stm32f0 FILES
-			stm32f0/coco/platform/InOut_GPIO.hpp
-			stm32f0/coco/platform/Input_GPIO.hpp
-			stm32f0/coco/platform/Output_GPIO.hpp
-			stm32f0/coco/platform/Trigger_EXTI_TIM2.hpp
+			stm32f0/coco/platform/Buttons_EXTI.hpp
+			stm32f0/coco/platform/InOutPins_GPIO.hpp
+			stm32f0/coco/platform/InputPins_GPIO.hpp
+			stm32f0/coco/platform/OutputPins_GPIO.hpp
 		PRIVATE
-			stm32f0/coco/platform/InOut_GPIO.cpp
-			stm32f0/coco/platform/Input_GPIO.cpp
-			stm32f0/coco/platform/Output_GPIO.cpp
-			stm32f0/coco/platform/Trigger_EXTI_TIM2.cpp
+			stm32f0/coco/platform/Buttons_EXTI.cpp
+			stm32f0/coco/platform/InOutPins_GPIO.cpp
+			stm32f0/coco/platform/InputPins_GPIO.cpp
+			stm32f0/coco/platform/OutputPins_GPIO.cpp
 	)
 endif()
 
