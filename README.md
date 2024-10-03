@@ -7,7 +7,7 @@ Add coco-io/\<version> to your conanfile where version corresponds to the git ta
 
 ## Features
 * Interface to GPIO pins
-* Input interface for push buttons, rotary buttons, d-pads etc.
+* Input interface for push buttons, rotary knobs, d-pads etc.
 
 ## Supported Platforms
 See README.md of coco base library

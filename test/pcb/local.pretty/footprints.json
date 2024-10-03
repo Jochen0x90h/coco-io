@@ -1,0 +1,31 @@
+{
+    "PEC12R-4217F-S0024": {
+        "description": "PEC12R - 12 mm Incremental Encoder (https://www.bourns.com/docs/product-datasheets/pec12r.pdf)",
+        "body": [12.4, 13.4, 5.1],
+        "pads": [
+            {
+                "position": [0, 7.5],
+                "pitch": 2.5,
+                "size": 1.6,
+                "drillSize": 1,
+                "count": 3,
+                "names": ["A", "C", "B"]
+            },
+            {
+                "position": [0, -7.0],
+                "pitch": 5,
+                "size": 1.6,
+                "drillSize": 1,
+                "count": 2,
+                "names": ["S1", "S2"]
+            },
+            {
+                "position": [0, 0],
+                "pitch": 11.2,
+                "size": [2.2, 3.6],
+                "drillSize": [1.6, 3.0],
+                "count": 2
+            }
+        ]
+    }
+}
