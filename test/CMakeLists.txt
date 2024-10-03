@@ -1,80 +1,45 @@
-# hex generator
-separate_arguments(GENERATE_HEX)
-macro(generate_hex TARGET)
-	if(NOT "${GENERATE_HEX}" STREQUAL "" AND NOT "${GENERATE_HEX}" STREQUAL "None")
-		#message("*** Generate Hex for ${TARGET}: ${GENERATE_HEX}")
-		add_custom_command(TARGET ${TARGET}
-			POST_BUILD
-			COMMAND ${GENERATE_HEX} ${TARGET} ${TARGET}.hex
-		)
-	endif()
-endmacro()
+# Generate a test for a board
+# TEST the test application, implemented in ${TEST}.cpp
+# BOARD_LIB a library for a board containing SystemInit() and a linker script for embedded platforms
+function(board_test TEST BOARD_LIB)
+    # check if board library exists for the current platform
+    if(TARGET ${BOARD_LIB})
+        string(REGEX REPLACE ".*\\:" "" BOARD ${BOARD_LIB})
+        set(NAME "${TEST}-${BOARD}")
+        message("*** Test ${TEST} on board ${BOARD}")
 
-# iterate over boards and generate tests
-foreach(COMPONENT ${coco-devboards_COMPONENT_NAMES})
-	string(REGEX REPLACE ".*\\:" "" BOARD ${COMPONENT})
-	message("*** Boad: ${BOARD}")
+        add_executable(${NAME}
+            ${TEST}.cpp
+        )
+        target_include_directories(${NAME}
+            PRIVATE
+                ../
+                ${BOARD}
+        )
+        target_link_libraries(${NAME}
+            ${BOARD_LIB}
+            ${PROJECT_NAME}
+        )
 
-	# check if board specific header exists
-	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${BOARD}/InOutPinsTest.hpp)
-		set(NAME "InOutPinsTest-${BOARD}")
+        # generate hex file for flashing the target
+        if(${CMAKE_CROSSCOMPILING})
+            #message("*** Generate Hex for ${NAME} using ${CMAKE_OBJCOPY}")
+            add_custom_command(TARGET ${NAME}
+                POST_BUILD
+                COMMAND ${CMAKE_OBJCOPY} -O ihex ${NAME} ${NAME}.hex
+            )
+        endif()
+    endif()
+endfunction()
 
-		add_executable(${NAME}
-			InOutPinsTest.cpp
-		)
-		target_include_directories(${NAME}
-			PRIVATE
-				../
-				${BOARD}
-		)
+board_test(InOutPortTest coco-devboards::native)
+board_test(InOutPortTest coco-devboards::nrf52dongle)
+board_test(InOutPortTest coco-devboards::stm32f0discovery)
+board_test(InOutPortTest coco-devboards::stm32g431nucleo)
 
-		# find link.ld of board
-		get_target_property(INCLUDES ${COMPONENT} INTERFACE_INCLUDE_DIRECTORIES)
-		target_link_directories(${NAME}
-			PRIVATE
-				${INCLUDES}
-		)
-
-		target_link_libraries(${NAME}
-			coco::coco
-			${COMPONENT}
-			coco-loop::coco-loop
-			${PROJECT_NAME}
-		)
-
-		# generate hex file for flashing the target
-		generate_hex(${NAME})
-	endif()
-
-	# check if board specific header exists
-	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${BOARD}/InputTest.hpp)
-		set(NAME "InputTest-${BOARD}")
-
-		add_executable(${NAME}
-			InputTest.cpp
-		)
-		target_include_directories(${NAME}
-			PRIVATE
-				../
-				${BOARD}
-		)
-
-		# find link.ld of board
-		get_target_property(INCLUDES ${COMPONENT} INTERFACE_INCLUDE_DIRECTORIES)
-		target_link_directories(${NAME}
-			PRIVATE
-				${INCLUDES}
-		)
-
-		target_link_libraries(${NAME}
-			coco::coco
-			${COMPONENT}
-			coco-loop::coco-loop
-			${PROJECT_NAME}
-		)
-
-		# generate hex file for flashing the target
-		generate_hex(${NAME})
-	endif()
-
-endforeach()
+board_test(InputDeviceTest coco-devboards::emu)
+board_test(InputDeviceTest coco-devboards::nrf52dongle)
+board_test(InputDeviceTest coco-devboards::stm32f0discovery)
+board_test(InputDeviceTest coco-devboards::stm32f3348discovery)
+board_test(InputDeviceTest coco-devboards::stm32g431nucleo)
+board_test(InputDeviceTest coco-devboards::stm32g474nucleo)
