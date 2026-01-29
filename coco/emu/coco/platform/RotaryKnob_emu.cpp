@@ -24,6 +24,7 @@ int RotaryKnob_emu::get(void *data, int size) {
 }
 
 Awaitable<Device::Events> RotaryKnob_emu::untilInput(int sequenceNumber) {
+    // don't wait if the sequence number has changed
     if (this->sequenceNumber != sequenceNumber)
         return {};
     return {this->st.tasks, Events::READABLE};
@@ -34,14 +35,14 @@ void RotaryKnob_emu::handle(Gui &gui) {
     if (result.delta) {
         this->counters[0] += *result.delta;
         ++this->sequenceNumber;
-        this->st.doAll(Events::READABLE);
+        this->st.notify(Events::READABLE);
     }
     if (result.button) {
         if (*result.button) {
             // button pressed
             ++this->counters[1];
             ++this->sequenceNumber;
-            this->st.doAll(Events::READABLE);
+            this->st.notify(Events::READABLE);
 
             // start timeout for long press
             this->loop.invoke(this->callback, 3s);
@@ -55,7 +56,7 @@ void RotaryKnob_emu::handle(Gui &gui) {
 void RotaryKnob_emu::handleTimeout() {
     ++this->counters[2];
     ++this->sequenceNumber;
-    this->st.doAll(Events::READABLE);
+    this->st.notify(Events::READABLE);
 }
 
 } // namespace coco

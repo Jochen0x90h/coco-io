@@ -7,9 +7,8 @@
 
 namespace coco {
 
-/**
-    Implementation of InOutPort using GPIO
-*/
+/// @brief Implementation of InOutPort using GPIO
+///
 class InOutPort_GPIO : public InOutPort {
 public:
     struct Config {
@@ -19,10 +18,12 @@ public:
         // initial mode (input or output)
         gpio::Mode initialMode;
 
-        // initial value (inverted by INVERT flag in config)
+        // initial output value (inverted by INVERT flag in config)
         bool initialValue;
     };
 
+    /// @brief Constructor.
+    /// @param configs array of pin configurations, must not be a temporary value
     explicit InOutPort_GPIO(Array<const Config> configs);
     ~InOutPort_GPIO() override;
 

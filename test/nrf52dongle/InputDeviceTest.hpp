@@ -23,15 +23,15 @@ struct Drivers {
     // input device
     using InputDevice = InputDevice_GPIOTE_RTC;
     static constexpr gpio::Config inputPinConfigs[] {
-        gpio::Config::P0_4 | gpio::Config::PULL_UP | gpio::Config::INVERT, //rotary knob A
-        gpio::Config::P0_5 | gpio::Config::PULL_UP | gpio::Config::INVERT, // rotary knob B
-        gpio::Config::P0_6 | gpio::Config::PULL_UP | gpio::Config::INVERT, // push button of rotary knob
-        //gpio::Config::P0_18 | gpio::Config::PULL_UP | gpio::Config::INVERT, // user button
+        gpio::P0_4 | gpio::Config::PULL_UP | gpio::Config::INVERT, //rotary knob A
+        gpio::P0_5 | gpio::Config::PULL_UP | gpio::Config::INVERT, // rotary knob B
+        gpio::P0_6 | gpio::Config::PULL_UP | gpio::Config::INVERT, // push button of rotary knob
+        //gpio::P0_18 | gpio::Config::PULL_UP | gpio::Config::INVERT, // user button
     };
     static constexpr InputDevice::Config inputConfigs[] {
-        {0, 0, InputDevice::Action::INCREMENT_WHEN_ENABLED, InputDevice::Action::DECREMENT_WHEN_ENABLED, 1ms, 1ms}, // quadrature decoder (inputs 0 and 1, counter 0)
-        {2, 1, InputDevice::Action::INCREMENT, InputDevice::Action::NONE, 10ms, 10ms}, // button press (input 2, counter 1)
-        {2, 2, InputDevice::Action::INCREMENT, InputDevice::Action::NONE, 3s, 10ms}, // button long press (input 2, counter 2)
+        {0, 0, InputDevice::Init::INPUT, InputDevice::Action::INCREMENT_WHEN_ENABLED, InputDevice::Action::DECREMENT_WHEN_ENABLED, 1ms, 1ms}, // quadrature decoder (inputs 0 and 1, counter 0)
+        {2, 1, InputDevice::Init::INPUT, InputDevice::Action::INCREMENT, InputDevice::Action::NONE, 10ms, 10ms}, // button press (input 2, counter 1)
+        {2, 2, InputDevice::Init::INPUT, InputDevice::Action::INCREMENT, InputDevice::Action::NONE, 3s, 10ms}, // button long press (input 2, counter 2)
     };
     InputDevice input{loop,
         inputPinConfigs,

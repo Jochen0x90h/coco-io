@@ -1,4 +1,4 @@
-#include "InOutPort_GPIO.hpp"
+#include "InOutPort_gpio.hpp"
 
 
 namespace coco {
@@ -6,7 +6,7 @@ namespace coco {
 InOutPort_GPIO::InOutPort_GPIO(Array<const Config> configs) : configs(configs) {
     for (const auto &config : configs) {
         gpio::setOutput(config.config, config.initialValue);
-        gpio::configure(config.initialMode, config.config);
+        gpio::enable(config.config, config.initialMode);
     }
 }
 
@@ -34,7 +34,7 @@ void InOutPort_GPIO::enableOut(uint32_t pins, uint32_t mask) {
     int bit = 0;
     for (const auto &config : this->configs) {
         if ((mask >> bit) & 1)
-            gpio::enableOutput(config.config, (pins >> bit) & 1);
+            gpio::setMode(config.config, ((pins >> bit) & 1) ? gpio::Mode::OUTPUT : gpio::Mode::INPUT);
         ++bit;
     }
 }

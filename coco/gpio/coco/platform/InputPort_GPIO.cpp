@@ -1,11 +1,11 @@
-#include "InputPort_GPIO.hpp"
+#include "InputPort_gpio.hpp"
 
 
 namespace coco {
 
 InputPort_GPIO::InputPort_GPIO(Array<const Config> configs) : configs(configs) {
     for (const auto &config : configs) {
-        gpio::configureInput(config.config);
+        gpio::enableInput(config.config);
     }
 }
 

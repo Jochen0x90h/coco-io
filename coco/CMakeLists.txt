@@ -36,27 +36,27 @@ elseif(${PLATFORM} STREQUAL "emu")
 elseif(${PLATFORM} MATCHES "^nrf52")
     target_sources(${PROJECT_NAME}
         PUBLIC FILE_SET platform_headers TYPE HEADERS BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/gpio ${CMAKE_CURRENT_SOURCE_DIR}/nrf52 FILES
-            gpio/coco/platform/InOutPort_GPIO.hpp
-            gpio/coco/platform/InputPort_GPIO.hpp
-            gpio/coco/platform/OutputPort_GPIO.hpp
-            nrf52/coco/platform/InputDevice_GPIOTE_RTC.hpp
+            gpio/coco/platform/InOutPort_gpio.hpp
+            gpio/coco/platform/InputPort_gpio.hpp
+            gpio/coco/platform/OutputPort_gpio.hpp
+            nrf52/coco/platform/InputDevice_gpioTE_RTC.hpp
         PRIVATE
-            gpio/coco/platform/InOutPort_GPIO.cpp
-            gpio/coco/platform/InputPort_GPIO.cpp
-            gpio/coco/platform/OutputPort_GPIO.cpp
-            nrf52/coco/platform/InputDevice_GPIOTE_RTC.cpp
+            gpio/coco/platform/InOutPort_gpio.cpp
+            gpio/coco/platform/InputPort_gpio.cpp
+            gpio/coco/platform/OutputPort_gpio.cpp
+            nrf52/coco/platform/InputDevice_gpioTE_RTC.cpp
     )
 elseif(${PLATFORM} MATCHES "^stm32")
     target_sources(${PROJECT_NAME}
         PUBLIC FILE_SET platform_headers TYPE HEADERS BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/gpio ${CMAKE_CURRENT_SOURCE_DIR}/stm32 FILES
-            gpio/coco/platform/InOutPort_GPIO.hpp
-            gpio/coco/platform/InputPort_GPIO.hpp
-            gpio/coco/platform/OutputPort_GPIO.hpp
+            gpio/coco/platform/InOutPort_gpio.hpp
+            gpio/coco/platform/InputPort_gpio.hpp
+            gpio/coco/platform/OutputPort_gpio.hpp
             stm32/coco/platform/InputDevice_EXTI_TIM.hpp
         PRIVATE
-            gpio/coco/platform/InOutPort_GPIO.cpp
-            gpio/coco/platform/InputPort_GPIO.cpp
-            gpio/coco/platform/OutputPort_GPIO.cpp
+            gpio/coco/platform/InOutPort_gpio.cpp
+            gpio/coco/platform/InputPort_gpio.cpp
+            gpio/coco/platform/OutputPort_gpio.cpp
             stm32/coco/platform/InputDevice_EXTI_TIM.cpp
     )
 endif()

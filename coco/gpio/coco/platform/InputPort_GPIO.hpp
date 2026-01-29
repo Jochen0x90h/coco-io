@@ -8,9 +8,8 @@
 
 namespace coco {
 
-/**
-    Implementation of InputPort using GPIO
-*/
+/// @brief Implementation of InputPort using GPIO.
+///
 class InputPort_GPIO : public InputPort {
 public:
     struct Config {
@@ -18,10 +17,8 @@ public:
         gpio::Config config;
     };
 
-    /**
-     * Constructor
-     * @param configs array of pin configurations, must not be a temporary value
-     */
+    /// @brief Constructor.
+    /// @param configs array of pin configurations, must not be a temporary value
     explicit InputPort_GPIO(Array<const Config> configs);
     ~InputPort_GPIO() override;
 

@@ -1,11 +1,11 @@
-#include "OutputPort_GPIO.hpp"
+#include "OutputPort_gpio.hpp"
 
 
 namespace coco {
 
 OutputPort_GPIO::OutputPort_GPIO(Array<const Config> configs) : configs(configs) {
     for (const auto &config : configs) {
-        gpio::configureOutput(config.config, config.initialValue);
+        gpio::enableOutput(config.config, config.initialValue);
     }
 }
 
