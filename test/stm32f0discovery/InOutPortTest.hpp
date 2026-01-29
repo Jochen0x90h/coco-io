@@ -16,10 +16,10 @@ void init() {}
 using namespace coco;
 
 InOutPort_GPIO::Config ioConfig[] {
-    {gpio::Config::PB12, gpio::Mode::INPUT, false},
-    {gpio::Config::PC9, gpio::Mode::OUTPUT, false}, // green LED
-    {gpio::Config::PC8, gpio::Mode::OUTPUT, false}, // blue LED
-    {gpio::Config::PA0 | gpio::Config::PULL_DOWN, gpio::Mode::INPUT, false} // user button
+    {gpio::PB12, gpio::Mode::INPUT, false},
+    {gpio::PC9, gpio::Mode::OUTPUT, false}, // green LED
+    {gpio::PC8, gpio::Mode::OUTPUT, false}, // blue LED
+    {gpio::PA0 | gpio::Config::PULL_DOWN, gpio::Mode::INPUT, false} // user button
 };
 
 // drivers for InOutTest

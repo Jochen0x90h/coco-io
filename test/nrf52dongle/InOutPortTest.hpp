@@ -15,10 +15,10 @@ void init() {}
 using namespace coco;
 
 InOutPort_GPIO::Config ioConfig[] {
-    {gpio::Config::P0_23 | gpio::Config::INVERT, gpio::Mode::OUTPUT, true}, // red LED
-    {gpio::Config::P0_22 | gpio::Config::INVERT, gpio::Mode::OUTPUT, true}, // green LED
-    {gpio::Config::P0_24 | gpio::Config::INVERT, gpio::Mode::OUTPUT, true}, // blue LED
-    {gpio::Config::P0_18 | gpio::Config::INVERT | gpio::Config::PULL_UP, gpio::Mode::INPUT, true} // user button
+    {gpio::P0_23 | gpio::Config::INVERT, gpio::Mode::OUTPUT, true}, // red LED
+    {gpio::P0_22 | gpio::Config::INVERT, gpio::Mode::OUTPUT, true}, // green LED
+    {gpio::P0_24 | gpio::Config::INVERT, gpio::Mode::OUTPUT, true}, // blue LED
+    {gpio::P0_18 | gpio::Config::INVERT | gpio::Config::PULL_UP, gpio::Mode::INPUT, true} // user button
 };
 
 // drivers for InOutTest

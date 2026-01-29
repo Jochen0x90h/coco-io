@@ -1,6 +1,8 @@
 #include <coco/Loop.hpp>
 #include <coco/debug.hpp>
+#include <coco/StreamOperators.hpp>
 #include <InputDeviceTest.hpp>
+#include <ranges>
 
 
 using namespace coco;
@@ -16,14 +18,17 @@ Coroutine inputTest(Loop &loop, InputDevice &input) {
 
         // output on debug LEDs
         if (state[1] != lastState[1]) {
-            // set magenta when button was pressed
-            debug::set(debug::MAGENTA);
+            // set green when button was pressed
+            debug::set(debug::GREEN);
+            debug::out << "Short press\n";
         } else if (state[2] != lastState[2]) {
-            // set yellow when button was long pressed
-            debug::set(debug::YELLOW);
+            // set magenta when button was long pressed
+            debug::set(debug::MAGENTA);
+            debug::out << "Long press\n";
         } else {
             // set counter of rotary knob
             debug::set(state[0]);
+            debug::out << "Rotate " << dec(state[0]) << "\n";
         }
         //debug::set(state[1]);
 
@@ -33,13 +38,15 @@ Coroutine inputTest(Loop &loop, InputDevice &input) {
         // wait until new input data is available, returns immediately if input with a new sequence number is already available
         co_await input.untilInput(seq);
 
-        // copy state
-        std::copy(state, state + 3, lastState);
+        // copy state into lastState
+        std::ranges::copy(state, lastState);
     }
 }
 
 
 int main() {
+    debug::out << "InputDeviceTest\n";
+
     inputTest(drivers.loop, drivers.input);
 
     drivers.loop.run();

@@ -1,5 +1,5 @@
 #include <coco/Loop.hpp>
-//#include <coco/debug.hpp> // no debug as test outputs are connected to debug LEDs
+#include <coco/debug.hpp> // no debug as test outputs are connected to debug LEDs
 #include <InOutPortTest.hpp>
 
 
@@ -26,14 +26,19 @@ Coroutine test(Loop &loop, InOutPort &io) {
         // clear counter if button is pressed, otherwise count up
         uint32_t pins;
         io.get(pins);
-        if (pins & (1 << 3))
+        if (pins & (1 << 3)) {
+            debug::out << "clear\n";
             count = 0;
-        else
+        } else {
+            debug::out << "count\n";
             ++count;
+        }
     }
 }
 
 int main() {
+    debug::out << "InOutPortTest\n";
+
     test(drivers.loop, drivers.io);
 
     drivers.loop.run();

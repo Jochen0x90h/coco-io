@@ -8,19 +8,20 @@
 
 namespace coco {
 
-/**
-    Implementation of OutputPort using GPIO
-*/
+/// @brief Implementation of OutputPort using GPIO.
+///
 class OutputPort_GPIO : public OutputPort {
 public:
     struct Config {
         // pin, port and configuration such as open drain
         gpio::Config config;
 
-        // initial value (inverted by INVERT flag in config)
+        // initial output value (inverted by INVERT flag in config)
         bool initialValue;
     };
 
+    /// @brief Constructor.
+    /// @param configs array of pin configurations, must not be a temporary value
     explicit OutputPort_GPIO(Array<const Config> configs);
     ~OutputPort_GPIO() override;
 
