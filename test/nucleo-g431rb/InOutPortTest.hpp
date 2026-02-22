@@ -1,7 +1,7 @@
 #pragma once
 
 #include <coco/platform/Loop_TIM2.hpp>
-#include <coco/platform/InOutPort_GPIO.hpp>
+#include <coco/platform/InOutPort_gpio.hpp>
 #include <coco/board/config.hpp>
 
 

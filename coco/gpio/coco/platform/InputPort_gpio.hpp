@@ -8,7 +8,7 @@
 
 namespace coco {
 
-/// @brief Implementation of InputPort using GPIO.
+/// @brief Implementation of InputPort using gpio HAL.
 ///
 class InputPort_GPIO : public InputPort {
 public:

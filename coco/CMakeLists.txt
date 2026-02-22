@@ -39,12 +39,12 @@ elseif(${PLATFORM} MATCHES "^nrf52")
             gpio/coco/platform/InOutPort_gpio.hpp
             gpio/coco/platform/InputPort_gpio.hpp
             gpio/coco/platform/OutputPort_gpio.hpp
-            nrf52/coco/platform/InputDevice_gpioTE_RTC.hpp
+            nrf52/coco/platform/InputDevice_GPIOTE_RTC.hpp
         PRIVATE
             gpio/coco/platform/InOutPort_gpio.cpp
             gpio/coco/platform/InputPort_gpio.cpp
             gpio/coco/platform/OutputPort_gpio.cpp
-            nrf52/coco/platform/InputDevice_gpioTE_RTC.cpp
+            nrf52/coco/platform/InputDevice_GPIOTE_RTC.cpp
     )
 elseif(${PLATFORM} MATCHES "^stm32")
     target_sources(${PROJECT_NAME}

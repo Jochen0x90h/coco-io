@@ -1,7 +1,7 @@
 #pragma once
 
 #include <coco/platform/Loop_RTC0.hpp>
-#include <coco/platform/InOutPort_GPIO.hpp>
+#include <coco/platform/InOutPort_gpio.hpp>
 
 
 // prevent initialization of debug LEDs so that we can use them in the test

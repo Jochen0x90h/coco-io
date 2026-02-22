@@ -2,19 +2,21 @@
 
 #include <coco/Array.hpp>
 #include <coco/platform/gpio.hpp>
-#include <coco/OutputPort.hpp>
-#include <string>
+#include <coco/InOutPort.hpp>
 
 
 namespace coco {
 
-/// @brief Implementation of OutputPort using GPIO.
+/// @brief Implementation of InOutPort using gpio HAL.
 ///
-class OutputPort_GPIO : public OutputPort {
+class InOutPort_GPIO : public InOutPort {
 public:
     struct Config {
-        // pin, port and configuration such as open drain
+        // pin, port and configuration such as pull up/down or open drain
         gpio::Config config;
+
+        // initial mode (input or output)
+        gpio::Mode initialMode;
 
         // initial output value (inverted by INVERT flag in config)
         bool initialValue;
@@ -22,10 +24,12 @@ public:
 
     /// @brief Constructor.
     /// @param configs array of pin configurations, must not be a temporary value
-    explicit OutputPort_GPIO(Array<const Config> configs);
-    ~OutputPort_GPIO() override;
+    explicit InOutPort_GPIO(Array<const Config> configs);
+    ~InOutPort_GPIO() override;
 
+    void get(uint32_t &pins) override;
     void set(uint32_t pins, uint32_t mask = 0xffffffff) override;
+    void enableOut(uint32_t pins, uint32_t mask = 0xffffffff) override;
 
 protected:
 

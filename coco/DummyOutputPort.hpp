@@ -5,9 +5,8 @@
 
 namespace coco {
 
-/**
-    Implementation of OutputPort that does nothing
-*/
+/// @brief Implementation of OutputPort that does nothing.
+///
 class DummyOutputPort : public OutputPort {
 public:
 

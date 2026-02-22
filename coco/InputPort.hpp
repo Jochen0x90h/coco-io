@@ -5,17 +5,14 @@
 
 namespace coco {
 
-/**
-    Virtual port of general purpose input pins
-*/
+/// @brief Virtual port of general purpose input pins.
+///
 class InputPort {
 public:
     virtual ~InputPort() {}
 
-    /**
-        Read the current value of an input
-        @param pins pins bit mask for the input pins
-    */
+    /// @brief Read the current value of an input.
+    /// @param pins pins bit mask for the input pins
     virtual void get(uint32_t &pins) = 0;
 };
 
