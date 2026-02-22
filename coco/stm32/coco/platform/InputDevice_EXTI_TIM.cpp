@@ -27,7 +27,7 @@ InputDevice_EXTI_TIM::InputDevice_EXTI_TIM(Loop_Queue &loop, Array<const gpio::C
 
         // get port and EXTI channel (is identical to pin number)
         int port = gpio::getPortIndex(config);
-        int line = gpio::getPinIndex2(config);
+        int line = gpio::getPinIndex(config);
         flags |= 1 << line;
 
         // configure EXTI port
@@ -115,7 +115,7 @@ int InputDevice_EXTI_TIM::get(void *data, int size) { //const Array<int8_t> &cou
 Awaitable<Device::Events> InputDevice_EXTI_TIM::untilInput(int sequenceNumber) {
     if (sequenceNumber_ != sequenceNumber)
         return {};
-    return {st.tasks, Events::READABLE};
+    return {tasks_, Events::READABLE};
 }
 
 // gets called from EXTI interrupt
@@ -131,10 +131,10 @@ void InputDevice_EXTI_TIM::EXTI_IRQHandler() {
             auto &config = configs_[i];
 
             // check if activity is detected for this config
-            int inputIndex = gpio::getPinIndex2(pinConfigs_[config.inputIndex]);
+            int inputIndex = gpio::getPinIndex(pinConfigs_[config.inputIndex]);
             bool detected = ((inputFlags >> inputIndex) & 1) != 0;
             if (config.hasSecondaryInput()) {
-                int inputIndex2 = gpio::getPinIndex2(pinConfigs_[config.inputIndex + 1]);
+                int inputIndex2 = gpio::getPinIndex(pinConfigs_[config.inputIndex + 1]);
                 detected |= ((inputFlags >> inputIndex2) & 1) != 0;
             }
 
@@ -261,7 +261,7 @@ void InputDevice_EXTI_TIM::update() {
 void InputDevice_EXTI_TIM::handle() {
     // gets called from the event loop to inform the application about a state change
     busy_ = false;
-    st.notify(Events::READABLE);
+    notify(Events::READABLE);
 }
 
 } // namespace coco

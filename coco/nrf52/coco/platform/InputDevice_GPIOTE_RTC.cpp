@@ -103,7 +103,7 @@ int InputDevice_GPIOTE_RTC::get(void *data, int size) {
 Awaitable<Device::Events> InputDevice_GPIOTE_RTC::untilInput(int sequenceNumber) {
     if (sequenceNumber_ != sequenceNumber)
         return {};
-    return {st.tasks, Events::READABLE};
+    return {tasks_, Events::READABLE};
 }
 
 void InputDevice_GPIOTE_RTC::GPIOTE_IRQHandler() {
@@ -253,7 +253,7 @@ void InputDevice_GPIOTE_RTC::update() {
 void InputDevice_GPIOTE_RTC::handle() {
     // gets called from the event loop to inform the application about a state change
     busy_ = false;
-    st.notify(Events::READABLE);
+    notify(Events::READABLE);
 }
 
 } // namespace coco

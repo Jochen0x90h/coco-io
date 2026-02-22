@@ -26,18 +26,18 @@ protected:
     void handle(Gui &gui) override;
     void handleTimeout();
 
-    Loop_emu &loop;
-    bool haveButton;
-    int id;
-    TimedTask<Callback> callback;
+    Loop_emu &loop_;
+    bool haveButton_;
+    int id_;
+    TimedTask<Callback> callback_;
 
     // sequence number gets incremented on state change
-    int sequenceNumber = 0;
+    int sequenceNumber_ = 0;
 
     // [0] rotary knob counter, [1] button, [2] long press on button
-    int8_t counters[3] = {};
+    int8_t counters_[3] = {};
 
-    //CoroutineTaskList<> changeTasks;
+    //CoroutineTaskList<> changeTasks_;
 };
 
 } // namespace coco
