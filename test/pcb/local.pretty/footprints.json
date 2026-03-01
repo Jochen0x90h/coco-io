@@ -3,7 +3,8 @@
     "PEC12R-4217F-S0024": {
         "description": "PEC12R - 12 mm Incremental Encoder (https://www.bourns.com/docs/product-datasheets/pec12r.pdf)",
         "body": {"size": [12.4, 13.4, 5.1]},
-        "courtyardAdd": 0.3,
+        "silkscreen": {"margin": -0.15},
+        "courtyard": {"margin": 0.15},
         "pads": [
             {
                 "position": [0, 7.5],
