@@ -258,7 +258,7 @@ void InputDevice_EXTI_TIM::update() {
     }
 }
 
-void InputDevice_EXTI_TIM::handle() {
+void InputDevice_EXTI_TIM::onCompletion() {
     // gets called from the event loop to inform the application about a state change
     busy_ = false;
     notify(Events::READABLE);

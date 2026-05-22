@@ -250,7 +250,7 @@ void InputDevice_GPIOTE_RTC::update() {
     }
 }
 
-void InputDevice_GPIOTE_RTC::handle() {
+void InputDevice_GPIOTE_RTC::onCompletion() {
     // gets called from the event loop to inform the application about a state change
     busy_ = false;
     notify(Events::READABLE);

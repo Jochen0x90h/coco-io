@@ -5,10 +5,9 @@
 
 namespace coco {
 
-/**
-    Emulated rotary switch knob with push button
- */
-class RotaryKnob_emu : public InputDevice, public Loop_emu::GuiHandler {
+/// @brief Emulated rotary switch knob with push button.
+///
+class RotaryKnob_emu : public InputDevice, public Loop_emu::GuiHandler, Loop_native::TimeoutHandler {
 public:
     /**
         Constructor
@@ -23,13 +22,13 @@ public:
     [[nodiscard]] Awaitable<Events> untilInput(int sequenceNumber) override;
 
 protected:
-    void handle(Gui &gui) override;
-    void handleTimeout();
+    void onGui(Gui &gui) override;
+    void onTimeout() override;
 
     Loop_emu &loop_;
     bool haveButton_;
     int id_;
-    TimedTask<Callback> callback_;
+    //TimedTask<Callback<>> callback_;
 
     // sequence number gets incremented on state change
     int sequenceNumber_ = 0;

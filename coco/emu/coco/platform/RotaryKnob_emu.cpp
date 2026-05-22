@@ -7,7 +7,7 @@ namespace coco {
 
 RotaryKnob_emu::RotaryKnob_emu(Loop_emu &loop, bool haveButton, int id)
     : InputDevice(State::READY)
-    , loop_(loop), haveButton_(haveButton), id_(id), callback_(makeCallback<RotaryKnob_emu, &RotaryKnob_emu::handleTimeout>(this))
+    , loop_(loop), haveButton_(haveButton), id_(id)//, callback_(makeCallback<RotaryKnob_emu, &RotaryKnob_emu::onTimeout>(this))
 {
     loop.guiHandlers.add(*this);
 }
@@ -30,7 +30,7 @@ Awaitable<Device::Events> RotaryKnob_emu::untilInput(int sequenceNumber) {
     return {tasks_, Events::READABLE};
 }
 
-void RotaryKnob_emu::handle(Gui &gui) {
+void RotaryKnob_emu::onGui(Gui &gui) {
     auto result = gui.widget<GuiRotaryKnob>(id_, 24, 0.1f, haveButton_);
     if (result.delta) {
         counters_[0] += *result.delta;
@@ -45,15 +45,16 @@ void RotaryKnob_emu::handle(Gui &gui) {
             notify(Events::READABLE);
 
             // start timeout for long press
-            loop_.invoke(callback_, 3s);
+            loop_.invoke(*this, 3s);
         } else {
             // cancel timeout for long press
-            callback_.remove();
+            //callback_.remove();
+            Loop_native::TimeoutHandler::remove();
         }
     }
 }
 
-void RotaryKnob_emu::handleTimeout() {
+void RotaryKnob_emu::onTimeout() {
     ++counters_[2];
     ++sequenceNumber_;
     notify(Events::READABLE);

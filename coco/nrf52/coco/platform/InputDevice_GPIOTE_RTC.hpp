@@ -17,7 +17,7 @@
 ///   RTC timer for debounce timeout
 namespace coco {
 
-class InputDevice_GPIOTE_RTC : public InputDevice, public Loop_Queue::Handler {
+class InputDevice_GPIOTE_RTC : public InputDevice, public Loop_Queue::CompletionHandler {
 public:
     enum class Init : uint8_t {
         // initial state is low
@@ -124,7 +124,7 @@ protected:
     void update();
 
     // gets called from the event loop to notify the main application
-    void handle() override;
+    void onCompletion() override;
 
     Loop_Queue &loop_;
 
