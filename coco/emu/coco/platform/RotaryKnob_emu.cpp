@@ -23,7 +23,7 @@ int RotaryKnob_emu::get(void *data, int size) {
     return sequenceNumber_;
 }
 
-Awaitable<Device::Events> RotaryKnob_emu::untilInput(int sequenceNumber) {
+Awaitable<CoroutineTask<Device::Events>> RotaryKnob_emu::untilInput(int sequenceNumber) {
     // don't wait if the sequence number has changed
     if (sequenceNumber_ != sequenceNumber)
         return {};

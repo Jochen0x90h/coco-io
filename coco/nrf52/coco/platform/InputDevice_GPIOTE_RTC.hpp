@@ -105,7 +105,7 @@ public:
 
     // InputDevice methods
     int get(void *data, int size) override;
-    [[nodiscard]] Awaitable<Events> untilInput(int sequenceNumber) override;
+    [[nodiscard]] Awaitable<CoroutineTask<Events>> untilInput(int sequenceNumber) override;
 
 
     /// @brief Call from interrupt handler of the GPIOTE (GPIOTE_IRQHandler())

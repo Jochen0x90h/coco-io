@@ -112,7 +112,7 @@ int InputDevice_EXTI_TIM::get(void *data, int size) { //const Array<int8_t> &cou
     return sequenceNumber;
 }
 
-Awaitable<Device::Events> InputDevice_EXTI_TIM::untilInput(int sequenceNumber) {
+Awaitable<CoroutineTask<Device::Events>> InputDevice_EXTI_TIM::untilInput(int sequenceNumber) {
     if (sequenceNumber_ != sequenceNumber)
         return {};
     return {tasks_, Events::READABLE};

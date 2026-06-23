@@ -100,7 +100,7 @@ int InputDevice_GPIOTE_RTC::get(void *data, int size) {
     return sequenceNumber;
 }
 
-Awaitable<Device::Events> InputDevice_GPIOTE_RTC::untilInput(int sequenceNumber) {
+Awaitable<CoroutineTask<Device::Events>> InputDevice_GPIOTE_RTC::untilInput(int sequenceNumber) {
     if (sequenceNumber_ != sequenceNumber)
         return {};
     return {tasks_, Events::READABLE};
