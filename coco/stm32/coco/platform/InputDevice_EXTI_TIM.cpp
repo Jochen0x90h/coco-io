@@ -8,10 +8,10 @@
 
 namespace coco {
 
-InputDevice_EXTI_TIM::InputDevice_EXTI_TIM(Loop_Queue &loop, Array<const gpio::Config> pinConfigs, Array<const Config> configs,
-    const TimerInfo &timerInfo, int prescaler)
+InputDevice_EXTI_TIM::InputDevice_EXTI_TIM(Loop_Queue &loop, Array<const gpio::Config> pins,
+    Array<const Config> configs, const TimerInfo &timerInfo, int prescaler)
     : InputDevice(State::READY)
-    , loop_(loop), pinConfigs_(pinConfigs), configs_(configs)
+    , loop_(loop), pins_(pins), configs_(configs)
     , timerIrq_(timerInfo.irq<timer::Irq::CC>())
 {
     assert(types.size() <= std::size(counters_));
@@ -19,15 +19,15 @@ InputDevice_EXTI_TIM::InputDevice_EXTI_TIM(Loop_Queue &loop, Array<const gpio::C
 
     // configure input pins
     int flags = 0;
-    for (int i = 0; i < pinConfigs.size(); ++i) {
-        auto &config = pinConfigs[i];
+    for (int i = 0; i < pins.size(); ++i) {
+        auto &pin = pins[i];
 
         // configure pin as input
-        gpio::enableInput(config);
+        gpio::enableInput(pin);
 
         // get port and EXTI channel (is identical to pin number)
-        int port = gpio::getPortIndex(config);
-        int line = gpio::getPinIndex(config);
+        int port = gpio::getPortIndex(pin);
+        int line = gpio::getPinIndex(pin);
         flags |= 1 << line;
 
         // configure EXTI port
@@ -40,6 +40,9 @@ InputDevice_EXTI_TIM::InputDevice_EXTI_TIM(Loop_Queue &loop, Array<const gpio::C
     }
     extiFlags_ = flags;
 
+    // detect rising and falling edge
+    exti::detectBothEdgesFlags(flags);
+
     // initialize states and counters
     for (int i = 0; i < configs.size(); ++i) {
         auto &config = configs[i];
@@ -48,9 +51,9 @@ InputDevice_EXTI_TIM::InputDevice_EXTI_TIM(Loop_Queue &loop, Array<const gpio::C
         int state;
         if (init >= Init::INPUT) {
             // get initial state from one or two inputs
-            state = int(gpio::getInput(pinConfigs[config.inputIndex]));
+            state = int(gpio::getInput(pins[config.inputIndex]));
             if (config.hasSecondaryInput())
-                state |= int(gpio::getInput(pinConfigs[config.inputIndex + 1])) << 1;
+                state |= int(gpio::getInput(pins[config.inputIndex + 1])) << 1;
         } else {
             // get initial state from config
             state = int(init);
@@ -77,10 +80,7 @@ InputDevice_EXTI_TIM::InputDevice_EXTI_TIM(Loop_Queue &loop, Array<const gpio::C
     // update to set first timer compare time
     update();
 
-    // detect rising and falling edge
-    exti::detectBothEdgesFlags(flags);
-
-    // clear interrupt flags
+    // clear EXTI interrupt flags
     exti::clearPendingFlags(flags);
 
     // enable EXTI interrupts
@@ -131,10 +131,10 @@ void InputDevice_EXTI_TIM::EXTI_IRQHandler() {
             auto &config = configs_[i];
 
             // check if activity is detected for this config
-            int inputIndex = gpio::getPinIndex(pinConfigs_[config.inputIndex]);
+            int inputIndex = gpio::getPinIndex(pins_[config.inputIndex]);
             bool detected = ((inputFlags >> inputIndex) & 1) != 0;
             if (config.hasSecondaryInput()) {
-                int inputIndex2 = gpio::getPinIndex(pinConfigs_[config.inputIndex + 1]);
+                int inputIndex2 = gpio::getPinIndex(pins_[config.inputIndex + 1]);
                 detected |= ((inputFlags >> inputIndex2) & 1) != 0;
             }
 
@@ -181,9 +181,9 @@ void InputDevice_EXTI_TIM::update() {
                     int last = states_[i];
 
                     // get current state from one or two inputs
-                    int state = int(gpio::getInput(pinConfigs_[config.inputIndex]));
+                    int state = int(gpio::getInput(pins_[config.inputIndex]));
                     if (config.hasSecondaryInput())
-                        state |= int(gpio::getInput(pinConfigs_[config.inputIndex + 1])) << 1;
+                        state |= int(gpio::getInput(pins_[config.inputIndex + 1])) << 1;
 
                     // set new state
                     states_[i] = state;

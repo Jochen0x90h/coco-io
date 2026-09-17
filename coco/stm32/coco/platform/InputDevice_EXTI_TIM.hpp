@@ -111,19 +111,19 @@ protected:
     /// @param configs array of up to 12 configurations, must not be a temporary value
     /// @param timerInfo info of timer to use
     /// @param prescaler timer prescaler value for 4kHz
-    InputDevice_EXTI_TIM(Loop_Queue &loop, Array<const gpio::Config> pinConfigs, Array<const Config> configs,
-        const TimerInfo &timerInfo, int prescaler);
+    InputDevice_EXTI_TIM(Loop_Queue &loop, Array<const gpio::Config> pinConfigs,
+        Array<const Config> configs, const TimerInfo &timerInfo, int prescaler);
 
 public:
     /// @brief Constructor
     /// @param loop event loop
-    /// @param pinConfigs array of up to 12 pin configurations, must not be a temporary value
+    /// @param pins array of up to 12 pin configurations, must not be a temporary value
     /// @param configs array of up to 12 configurations, must not be a temporary value
     /// @param timerInfo info of timer to use
     /// @param timerClock timer clock frequency
-    InputDevice_EXTI_TIM(Loop_Queue &loop, Array<const gpio::Config> pinConfigs, Array<const Config> configs,
-        const TimerInfo &timerInfo, Kilohertz<> timerClock)
-        : InputDevice_EXTI_TIM(loop, pinConfigs, configs, timerInfo, (timerClock.value >> 2) - 1) {}
+    InputDevice_EXTI_TIM(Loop_Queue &loop, Array<const gpio::Config> pins,
+        Array<const Config> configs, const TimerInfo &timerInfo, Kilohertz<> timerClock)
+        : InputDevice_EXTI_TIM(loop, pins, configs, timerInfo, (timerClock.value >> 2) - 1) {}
     ~InputDevice_EXTI_TIM();
 
     // InputDevice methods
@@ -151,7 +151,7 @@ protected:
 
     Loop_Queue &loop_;
 
-    Array<const gpio::Config> pinConfigs_;
+    Array<const gpio::Config> pins_;
     Array<const Config> configs_;
 
     TimerInfo::Instance timer_;

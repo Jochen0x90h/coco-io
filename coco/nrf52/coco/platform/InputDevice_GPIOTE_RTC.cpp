@@ -6,27 +6,27 @@
 
 namespace coco {
 
-InputDevice_GPIOTE_RTC::InputDevice_GPIOTE_RTC(Loop_Queue &loop, Array<const gpio::Config> pinConfigs, Array<const Config> configs,
-    int firstEventIndex, const rtc::Info &rtcInfo, int ccIndex)
+InputDevice_GPIOTE_RTC::InputDevice_GPIOTE_RTC(Loop_Queue &loop, Array<const gpio::Config> pins,
+    Array<const Config> configs, int firstEventIndex, const rtc::Info &rtcInfo, int ccIndex)
     : InputDevice(State::READY)
-    , loop_(loop), pinConfigs_(pinConfigs), configs_(configs), firstEventIndex_(firstEventIndex)
+    , loop_(loop), pins_(pins), configs_(configs), firstEventIndex_(firstEventIndex)
     , rtc_(rtcInfo.rtc), rtcIrq_(rtcInfo.irq), ccIndex_(ccIndex)
 {
     assert(types.size() <= std::size(counters_));
     assert(configs.size() <= std::size(cc_));
 
     // configure input pins
-    for (int i = 0; i < pinConfigs.size(); ++i) {
-        auto &config = pinConfigs[i];
+    for (int i = 0; i < pins.size(); ++i) {
+        auto &pin = pins[i];
         int eventIndex = firstEventIndex + i;
 
         // configure input pin
-        gpio::enableInput(config);
+        gpio::enableInput(pin);
 
         // configure GPIOTE event
         NRF_GPIOTE->CONFIG[eventIndex] = N(GPIOTE_CONFIG_MODE, Event)
             | N(GPIOTE_CONFIG_POLARITY, Toggle)
-            | V(GPIOTE_CONFIG_PSEL, gpio::getPinPortIndex(config));
+            | V(GPIOTE_CONFIG_PSEL, gpio::getPinPortIndex(pin));
         NRF_GPIOTE->EVENTS_IN[eventIndex] = 0; // clear pending event
 
         // enable GPIOTE event interrupt
@@ -41,9 +41,9 @@ InputDevice_GPIOTE_RTC::InputDevice_GPIOTE_RTC(Loop_Queue &loop, Array<const gpi
         int state;
         if (init >= Init::INPUT) {
             // get initial state from one or two inputs
-            state = int(gpio::getInput(pinConfigs[config.inputIndex]));
+            state = int(gpio::getInput(pins[config.inputIndex]));
             if (config.hasSecondaryInput())
-                state |= int(gpio::getInput(pinConfigs[config.inputIndex + 1])) << 1;
+                state |= int(gpio::getInput(pins[config.inputIndex + 1])) << 1;
         } else {
             // get initial state from config
             state = int(init);
@@ -109,7 +109,7 @@ Awaitable<CoroutineTask<Device::Events>> InputDevice_GPIOTE_RTC::untilInput(int 
 void InputDevice_GPIOTE_RTC::GPIOTE_IRQHandler() {
     // collect detection flags
     int inputFlags = 0;
-    for (int i = 0; i < pinConfigs_.size(); ++i) {
+    for (int i = 0; i < pins_.size(); ++i) {
         int eventIndex = firstEventIndex_ + i;
         inputFlags |= NRF_GPIOTE->EVENTS_IN[eventIndex] << i;
 
@@ -175,9 +175,9 @@ void InputDevice_GPIOTE_RTC::update() {
                     int last = states_[i];
 
                     // get current state from one or two inputs
-                    int state = int(gpio::getInput(pinConfigs_[config.inputIndex]));
+                    int state = int(gpio::getInput(pins_[config.inputIndex]));
                     if (config.hasSecondaryInput())
-                        state |= gpio::getInput(pinConfigs_[config.inputIndex + 1]) << 1;
+                        state |= gpio::getInput(pins_[config.inputIndex + 1]) << 1;
 
                     // set new state
                     states_[i] = state;

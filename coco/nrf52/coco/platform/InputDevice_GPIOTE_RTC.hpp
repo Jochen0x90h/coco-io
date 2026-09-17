@@ -99,8 +99,8 @@ public:
     /// @param firstEventIndex first index of GPIOTE events to use
     /// @param rtcInfo info of rtc to use
     /// @param ccIndex capture/compare channel to use
-    InputDevice_GPIOTE_RTC(Loop_Queue &loop, Array<const gpio::Config> pinConfigs, Array<const Config> configs,
-        int firstEventIndex, const rtc::Info &rtcInfo, int ccIndex = 0);
+    InputDevice_GPIOTE_RTC(Loop_Queue &loop, Array<const gpio::Config> pins,
+        Array<const Config> configs, int firstEventIndex, const rtc::Info &rtcInfo, int ccIndex = 0);
     ~InputDevice_GPIOTE_RTC();
 
     // InputDevice methods
@@ -128,7 +128,7 @@ protected:
 
     Loop_Queue &loop_;
 
-    Array<const gpio::Config> pinConfigs_;
+    Array<const gpio::Config> pins_;
     Array<const Config> configs_;
 
     int firstEventIndex_;
